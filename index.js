@@ -44,16 +44,7 @@ async function run() {
         })
 
 
-        //item collection api
-        // app.get('/product', async (req, res) => {
-        //     const email = req.query.email;
-        //     console.log(email);
-        //     const query = { email: email };
-        //     console.log(query);
-        //     const cursor = productCollection.find(query);
-        //     const some = await cursor.toArray();
-        //     res.send(some);
-        // })
+       
 
         app.post('/product', async (req, res) => {
             const newProduct = req.body;
