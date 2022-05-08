@@ -26,24 +26,60 @@ async function run() {
             res.send(products);
         })
 
-        app.get('/product/:id', async(req, res) =>{
+        app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const product = await productCollection.findOne(query);
             res.send(product);
         })
 
-        app.post('/product', async (req, res) =>{
+        //item collection api
+        app.get('/myProducts', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = productCollection.find(query);
+            const product = await cursor.toArray();
+            res.send(product);
+        })
+
+
+        //item collection api
+        // app.get('/product', async (req, res) => {
+        //     const email = req.query.email;
+        //     console.log(email);
+        //     const query = { email: email };
+        //     console.log(query);
+        //     const cursor = productCollection.find(query);
+        //     const some = await cursor.toArray();
+        //     res.send(some);
+        // })
+
+        app.post('/product', async (req, res) => {
             const newProduct = req.body;
             const result = await productCollection.insertOne(newProduct);
             res.send(result);
         });
 
+
+
         app.delete('/product/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const result = await productCollection.deleteOne(query);
             res.send(result);
+        })
+
+        app.put('/product/:id', async (req, res) => {
+            const itemId = req.params.id;
+            const updateData = req.body.newItemValue.quantity;
+            const filter = { _id: ObjectId(`${itemId}`) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    quantity: updateData
+                },
+            };
+            const result = await productCollection.updateOne(filter, updateDoc, options);
         })
 
     }
