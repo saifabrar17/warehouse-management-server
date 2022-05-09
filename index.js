@@ -43,8 +43,21 @@ async function run() {
             res.send(product);
         })
 
+        //took 2hours to work but still not 100% functional
+        //low stock LEAVE UNTOUCHED
+        app.get('/running_out', async (req, res) => {
+            // const query = { quantity: { $lt: 10 } };
+            const query = { $or: [{ quantity: { $lt: "15" } }, { quantity: { $lt: 13} }] };
+            const cursor = productCollection.find(query);
+            const runningOut = await cursor.toArray();
+            res.send(runningOut);
+        })
 
-       
+
+
+
+
+
 
         app.post('/product', async (req, res) => {
             const newProduct = req.body;
